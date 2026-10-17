@@ -1,6 +1,6 @@
 use flate2::read::ZlibDecoder;
-use std::io::Read;
-use std::{env, error, fs, path};
+use std::io::{Read, Write};
+use std::{env, error, fs};
 
 fn main() -> Result<(), Box<dyn error::Error>> {
     let args = env::args();
@@ -23,7 +23,7 @@ fn main() -> Result<(), Box<dyn error::Error>> {
     // read content
     let current_dir = env::current_dir()?
         .ancestors()
-        .find(|&osstr| path::Path::new(osstr).join("git").exists())
+        .find(|path| path.join(".git").exists())
         .expect("cannot find .git directory")
         .to_path_buf();
     
@@ -32,9 +32,10 @@ fn main() -> Result<(), Box<dyn error::Error>> {
 
     //decode
     let mut zlib = ZlibDecoder::new(&content[..]);
-    let mut out = String::new();
-    zlib.read_to_string(&mut out)?;
+    let mut out = vec![];
+    zlib.read_to_end(&mut out)?;
 
-    print!("{}", out);
+    //print
+    std::io::stdout().write_all(&out[..])?;
     Ok(())
 }
