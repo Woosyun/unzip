@@ -1,7 +1,7 @@
-unzip object
+unzip objects
 
 ## How to install
-1. clone this repository
+1. clone repository
 2. build
 ```
 cargo build --release
@@ -12,8 +12,6 @@ cargo install --path .
 ```
 
 ## How to use
-1. go to directory containing .git directory
-2. run command with hexdump, optionally.
 ```
-unzip <object-id> | hexdump -C
+cat .git/objects/37/56aa57fa56d2ddec7c54412ccd3c7619d5ab53 | unzip | hexdump -C
 ```
